@@ -40,7 +40,10 @@
                 <!--end::Primary button-->
 
                 <!--begin:: Export-->
-                <a href="#" class="btn btn-sm fw-bold btn-info"><i class="fa-duotone fa-download me-1 fs-4"></i>Export</a>
+                <!-- <a href="#" class="btn btn-sm fw-bold btn-info"><i class="fa-duotone fa-download me-1 fs-4"></i>Export</a> -->
+                <button type="button" class="btn btn-sm fw-bold btn-info" id="assignStudentsBtn" disabled>
+                    Assign to Class
+                </button>
                 <!--end:: Export-->
 
             </div>
@@ -67,6 +70,7 @@
                                     <!--begin::Table head-->
                                     <thead class="table-light">
                                     <tr class="fw-bold text-muted">
+                                        <th > <input type="checkbox" id="selectAll"></th>
                                         <th class="ps-3">User Name</th>
                                         <th class="">Email</th>
                                         <th class="">OR Level</th>
@@ -84,6 +88,9 @@
                                     @if($user->role =='student')
                                         
                                         <tr>
+                                        <td class="align-middle">
+                                                <div class="text-dark fw-bold d-block"> <input type="checkbox" name="students[]" value="{{ $user->id }}"></div>
+                                            </td>
                                             <td class="align-middle ps-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="symbol symbol-50px me-3 bg-light">
@@ -149,5 +156,79 @@
                     </div>
                 </div>
             </div>
+
+
+
+
+            <!-- Assign Students Modal -->
+<div class="modal fade" id="assignStudentsModal" tabindex="-1" aria-labelledby="assignStudentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignStudentsModalLabel">Assign Students to Class</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="assignStudentsForm" action="{{ route('assignStudents') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="classSelect" class="form-label">Select Class</label>
+                        <select class="form-control" name="class_id" id="classSelect" required>
+                            <option value="">-- Select Class --</option>
+                            @foreach ($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->class_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <input type="hidden" name="student_ids" id="selectedStudents">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <!--end::Row-->
+@endsection
+
+
+@section('scripts')
+
+<script>
+    $(document).ready(function () {
+        // Select All Checkbox
+        $('#selectAll').on('change', function () {
+            console.log('clicked');
+            $('input[name="students[]"]').prop('checked', $(this).prop('checked'));
+            toggleAssignButton();
+        });
+
+        // Individual Checkboxes
+        $('input[name="students[]"]').on('change', function () {
+            toggleAssignButton();
+            console.log('clicked');
+
+        });
+
+        function toggleAssignButton() {
+            let selected = $('input[name="students[]"]:checked').length;
+            $('#assignStudentsBtn').prop('disabled', selected === 0);
+        }
+
+        // Open Modal and Pass Selected Students
+        $('#assignStudentsBtn').on('click', function () {
+            let selectedStudents = [];
+            $('input[name="students[]"]:checked').each(function () {
+                selectedStudents.push($(this).val());
+            });
+            $('#selectedStudents').val(selectedStudents.join(',')); // Store student IDs in hidden input
+            $('#assignStudentsModal').modal('show'); // Show modal
+        });
+    });
+</script>
+
+
 @endsection

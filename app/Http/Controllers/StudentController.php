@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\FormClass;
 use App\Models\User;
 use App\Models\Book;
 use App\Models\Genre;
@@ -21,8 +22,12 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $data = User::all();
-        return view('students.list',['userslist'=>$data]);
+        // dd("here");
+        $data = User::where('role', 'student')->get();
+        $classes = FormClass::all();
+
+        // dd($data);
+        return view('students.list',['userslist'=>$data,'classes'=>$classes]);
     }
 
     public function profile($id)

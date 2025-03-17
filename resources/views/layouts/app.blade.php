@@ -165,9 +165,11 @@ if (document.documentElement) {
                                         <!--end::Avatar-->
                                         <!--begin::Username-->
                                         <div class="d-flex flex-column">
+                                        @if(Auth::check())
                                             <div class="fw-bold d-flex align-items-center fs-5"> {{ Auth::user()->name }}
                                             </div>
                                             <a href="#" class="fw-semibold text-muted text-hover-primary fs-7"> {{ Auth::user()->email }}</a>
+                                        @endif
                                         </div>
                                         <!--end::Username-->
                                     </div>
@@ -342,7 +344,7 @@ if (document.documentElement) {
                                     @endif
                                     <!--end:Menu link-->
                                     <!--begin:Menu link-->
-                                    <a class="menu-link" href="{{ route('studentassignment', ['id' => Auth::user()->id]) }}">
+                                    <a class="menu-link d-none" href="{{ route('studentassignment', ['id' => Auth::user()->id]) }}">
                                         <span class="menu-icon">
                                             <i class="fa-solid fa-pencil"></i>
                                         </span>
@@ -415,7 +417,13 @@ if (document.documentElement) {
             <!--begin::Main-->
             <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
                 <!--begin::Content wrapper-->
+
+                
                 @yield("content")
+
+
+
+
                 <!--end::Content wrapper-->
                 <!--begin::Footer-->
                 <div id="kt_app_footer" class="app-footer">
@@ -466,15 +474,23 @@ if (document.documentElement) {
 </body>
 <!--end::Body-->
 </html>
-
+@yield("scripts")
 <script>
     @yield("footerjs")
-    $("#kt_datatable_both_scrolls").DataTable({
+
+    let table = $("#kt_datatable_both_scrolls").DataTable({
         "scrollX": true,
         "sortable": true,
         "ordering": true,
+        "searching": true, // Enable search
         "order": [[0, "asc"]],
-    });
 
+         // Custom search box functionality
+        
+    });
+    
+    $('.form-control').on('keyup', function () {
+            table.search($(this).val()).draw();
+        });
     
 </script>

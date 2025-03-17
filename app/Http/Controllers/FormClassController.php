@@ -9,6 +9,15 @@ use Illuminate\Http\Request;
 class FormClassController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    /**
      * Display a listing of the resource.
      */
     public function formclassteacherlist()
@@ -41,9 +50,27 @@ class FormClassController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FormClass $formClass)
+    public function assignStudents(Request $request)
     {
-        //
+        $request->validate([
+            'class_id' => 'required|exists:form_classes,id',
+            'student_ids' => 'required|string',
+        ]);
+        
+        $studentIds = explode(',', $request->student_ids);
+
+        // Ensure we have valid IDs
+            if (!is_array($studentIds) || count($studentIds) === 0) {
+                return back()->withErrors(['student_ids' => 'No students selected.']);
+            }
+
+         // Update class_id for selected students
+        User::whereIn('id', $studentIds)->update(['assigned_class' => $request->class_id]);
+
+
+        // dd($request->all());
+    
+        return back()->with('success', 'Students assigned to class successfully!');
     }
 
     /**
