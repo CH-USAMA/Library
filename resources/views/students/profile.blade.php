@@ -1,45 +1,45 @@
 @extends('layouts.app')
 @section('content')
 <div class="kt-app-main-content d-flex flex-column app-container container-fluid">
-	<!--begin::Toolbar-->
-	<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-		<!--begin::Toolbar container-->
-		<div id="kt_app_toolbar_container" class="d-flex flex-stack w-100">
-			<!--begin::Page title-->
-			<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-				<!--begin::Title-->
-				<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Students</h1>
-				<!--end::Title-->
-				<!--begin::Breadcrumb-->
-				<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-					<!--begin::Item-->
-					<li class="breadcrumb-item text-muted">
-						<a href={{route("dashboard")}} class="text-muted text-hover-primary">Home</a>
-					</li>
-					<!--end::Item-->
-					<!--begin::Item-->
-					<li class="breadcrumb-item">
-						<span class="bullet bg-gray-400 w-5px h-2px"></span>
-					</li>
-					<!--end::Item-->
-					<!--begin::Item-->
-					<li class="breadcrumb-item text-muted">Students</li>
-					<!--end::Item-->
-					<!--begin::Item-->
-					<li class="breadcrumb-item">
-						<span class="bullet bg-gray-400 w-5px h-2px"></span>
-					</li>
-					<!--end::Item-->
-					<!--begin::Item-->
-					<li class="breadcrumb-item text-muted">Profile</li>
-					<!--end::Item-->
-				</ul>
-				<!--end::Breadcrumb-->
-			</div>
-		</div>
-		<!--end::Toolbar container-->
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="d-flex flex-stack w-100">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Students</h1>
+                <!--end::Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">
+                        <a href={{route("dashboard")}} class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">Students</li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">Profile</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+        </div>
+        <!--end::Toolbar container-->
 
-	</div>
+    </div>
 
 
     <!--begin::Content-->
@@ -56,7 +56,7 @@
                                 <!--begin: Pic-->
                                 <div class="me-7 mb-4">
                                     <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative bg-light">
-                                        <img src="assets/media/svg/avatars/001-boy.svg"  alt="image"/>
+                                        <img src="assets/media/svg/avatars/001-boy.svg" alt="image" />
                                         <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border-4 border-body h-20px w-20px"></div>
                                     </div>
                                 </div>
@@ -70,7 +70,7 @@
                                             <!--begin::Name-->
                                             <div class="d-flex align-items-center">
                                                 <a href="#"
-                                                   class="text-gray-900 text-hover-primary fs-2 fw-bold me-2">{{$user['name']}}</a>
+                                                    class="text-gray-900 text-hover-primary fs-2 fw-bold me-2">{{$user['name']}}</a>
                                                 <div class="fs-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Active">
                                                     <span class="fa-layers fa-fw">
                                                         <i class="fa-duotone fa-badge text-success"></i>
@@ -85,7 +85,7 @@
                                                     <i class="fa-duotone fa-circle-user fs-6 me-2"></i>
                                                     {{$user['email']}}
                                                 </div>
-                                             
+
                                                 <a class="d-flex align-items-center mb-2 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Date Of Birth">
                                                     <i class="fa-duotone fa-calendar fs-6 me-2"></i>
                                                     {{$user['date_of_birth']}}
@@ -94,7 +94,7 @@
                                             <!--end::Info-->
                                         </div>
                                         <!--end::User-->
-                                       
+
                                     </div>
                                     <!--end::Title-->
                                     <!--begin::Stats-->
@@ -109,8 +109,8 @@
                                                     <div class="d-flex align-items-center">
                                                         <i class="fa-duotone fa-book-open fs-4 text-primary me-2"></i>
                                                         <div class="fs-2 fw-bold" data-kt-countup="true"
-                                                             data-kt-countup-value="1000"
-                                                             data-kt-countup-prefix="">0
+                                                            data-kt-countup-value="{{$reviewsCount}}"
+                                                            data-kt-countup-prefix="">0
                                                         </div>
                                                     </div>
                                                     <!--end::Number-->
@@ -120,32 +120,15 @@
                                                     <!--end::Label-->
                                                 </div>
                                                 <!--end::Stat-->
-                                                <!--begin::Stat-->
-                                                <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                                    <!--begin::Number-->
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="fa-duotone fa-file-lines fs-4 text-success me-2"></i>
-                                                        <div class="fs-2 fw-bold" data-kt-countup="true"
-                                                             data-kt-countup-value="1"
-                                                             data-kt-countup-suffix=" Review">0
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Number-->
-                                                    <!--begin::Label-->
-                                                    <div class="fw-semibold fs-6 text-gray-400">
-                                                        Reviews
-                                                    </div>
-                                                    <!--end::Label-->
-                                                </div>
-                                                <!--end::Stat-->
+
                                                 <!--begin::Stat-->
                                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                                     <!--begin::Number-->
                                                     <div class="d-flex align-items-center">
                                                         <i class="fa-duotone fa-book-open-reader fs-4 text-danger me-2"></i>
                                                         <div class="fs-2 fw-bold" data-kt-countup="true"
-                                                             data-kt-countup-value="{{$user['or_level']}}"
-                                                             data-kt-countup-suffix="">0
+                                                            data-kt-countup-value="{{$user['or_level']}}"
+                                                            data-kt-countup-suffix="">0
                                                         </div>
                                                     </div>
                                                     <!--end::Number-->
@@ -175,8 +158,17 @@
                                     </div>
                                     <!--end::Card title-->
                                     <!--begin::Action-->
-                                    <a class="company-edit-profile btn btn-sm btn-primary align-self-center">Edit
-                                        Profile</a>
+                                    @if (session('success'))
+                                    <div class="alert alert-success">{{ session('success') }}</div>
+                                    @endif
+
+                                    @if (session('error'))
+                                    <div class="alert alert-danger">{{ session('error') }}</div>
+                                    @endif
+
+
+                                    <a href="#" class="company-edit-profile btn btn-sm btn-primary align-self-center" data-bs-toggle="modal" data-bs-target="#editPasswordModal">Edit Password</a>
+
                                     <!--end::Action-->
                                 </div>
                                 <!--begin::Card header-->
@@ -223,9 +215,9 @@
                                         <!--begin::Label-->
                                         <label class="col-lg-4 fw-semibold text-muted">ID
                                             <span class="ms-1" data-bs-toggle="tooltip"
-                                                  title="it should be unique">
-                                                        <i class="fa-duotone fa-circle-exclamation fs-7"></i>
-                                                    </span>
+                                                title="it should be unique">
+                                                <i class="fa-duotone fa-circle-exclamation fs-7"></i>
+                                            </span>
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Col-->
@@ -240,7 +232,7 @@
                                     <div class="row mb-7">
                                         <!--begin::Label-->
                                         <label class="col-lg-4 fw-semibold text-muted">Password
-                                            </label>
+                                        </label>
                                         <!--end::Label-->
                                         <!--begin::Col-->
                                         <div class="col-lg-8 d-flex align-items-center">
@@ -249,7 +241,7 @@
                                         <!--end::Col-->
                                     </div>
                                     <!--end::Input group-->
-                                  
+
                                 </div>
                                 <!--end::Card body-->
                             </div>
@@ -264,4 +256,35 @@
     </div>
     <!--end::Content-->
 
-@endsection
+
+
+    <div class="modal fade" id="editPasswordModal" tabindex="-1" aria-labelledby="editPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updatePasswordForm" action="{{ route('update.password') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" name="current_password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" name="new_password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" name="new_password_confirmation" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @endsection

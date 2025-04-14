@@ -94,4 +94,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(FormClass::class, 'substitute_teacher_id', 'id');
     }
+
+    public function class()
+    {
+        return $this->belongsTo(FormClass::class, 'assigned_class','id');
+    }
 }

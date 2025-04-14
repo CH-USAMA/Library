@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\User;
 use App\Models\Genre;
+use App\Models\Review;
+
 //use App\Http\Requests\StoreBooksRequest;
 use Illuminate\Http\Request;
 //use App\Http\Requests\UpdateBooksRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class BookController extends Controller
 {
@@ -26,10 +30,27 @@ class BookController extends Controller
      */
     public function index()
     {
-        $data = Book::all();
+        // $data = Book::all();
+        $data = Book::withCount('review') // Get total reviews per book
+        ->withAvg('review', 'rating') // Get average rating per book
+        ->get();
         return view( 'books.list',['bookslist'=>$data]);
     }
 
+    public function assignedBook()
+    {
+        $data = Book::with('review')->where('id', Auth::user()->book_id)->get();
+        $totalReviews = Review::where('book_id', Auth::user()->book_id)->count();
+        $avgRating = Review::where('book_id', Auth::user()->book_id)->avg('rating');
+        $canReview = !Review::where('book_id', Auth::user()->book_id)
+        ->where('student_id', Auth::id())
+        ->exists();
+
+
+
+        // dd($data);
+        return view( 'books.studentAssignedBook',['book'=>$data, 'totalReviews'=>$totalReviews, 'avgRating'=>$avgRating, 'canReview'=>$canReview]);
+    }
     public function tindex()
     {
         $data = Book::all();
@@ -121,4 +142,9 @@ class BookController extends Controller
         return redirect()->route('books');
 
     }
+
+
+
+
+   
 }

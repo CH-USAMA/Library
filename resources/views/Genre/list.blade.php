@@ -40,7 +40,7 @@
                 <!--end::Primary button-->
 
                 <!--begin:: Export-->
-                <a href="#" class="btn btn-sm fw-bold btn-info"><i class="fa-duotone fa-download me-1 fs-4"></i>Export</a>
+                <!-- <a href="#" class="btn btn-sm fw-bold btn-info"><i class="fa-duotone fa-download me-1 fs-4"></i>Export</a> -->
                 <!--end:: Export-->
 
             </div>

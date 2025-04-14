@@ -95,7 +95,11 @@
 							<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 								<div></div>
 								<!--begin::Link-->
-								<a href="reset-password.html" class="link-primary">Forgot Password ?</a>
+								@if (Route::has('password.request'))
+                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                        {{ __('Forgot Your Password?') }}
+                                    </a>
+                                @endif
 								<!--end::Link-->
 							</div>
 							<!--end::Wrapper-->

@@ -18,4 +18,9 @@ class FormClass extends Model
     {
         return $this->belongsTo(User::class, 'substitute_teacher_id', 'id');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'teacher_id', 'id');
+    }
 }

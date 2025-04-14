@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Http\Requests\StoreReviewsRequest;
 use App\Http\Requests\UpdateReviewsRequest;
 use App\Models\User;
 use App\Models\Book;
+use Auth;
+
 class ReviewController extends Controller
 {
     /**
@@ -23,19 +26,27 @@ class ReviewController extends Controller
      */
     public function reviewlist()
     {
-        $data = Review::with('student','book')->get();
-        //dd($data);
-        return view('reviews.list',['reviewslist'=>$data]);
+        if (Auth::user()->role == 'teacher' or Auth::user()->role == 'admin') {
+            $data = Review::with('student', 'book')->get();
+        } else {
+            $data = Review::with(['student' => function ($query) {
+                $query->where('role', 'student');
+            }, 'book'])
+                ->where('student_id', auth()->id()) // Filter reviews where user_id matches the logged-in user
+                ->get();
+        }
+        // dd(auth()->id());
+        return view('reviews.list', ['reviewslist' => $data]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function createreview($student_id,$book_id)
+    public function createreview($student_id, $book_id)
     {
-        $book = Book::where('id', $book_id)->first();          
+        $book = Book::where('id', $book_id)->first();
         $student = User::where('id', $student_id)->first();
-        return view('reviews.form',compact('book', 'student'));
+        return view('reviews.form', compact('book', 'student'));
     }
 
     /**
@@ -51,9 +62,21 @@ class ReviewController extends Controller
         $review->comment_text = $request->comment_text;
         $review->save();
         return redirect()->route('reviews');
-
     }
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function showBookReview($book_id)
+    {
+        $data = Review::with(['student' => function ($query) {
+            $query->where('role', 'student');
+        }, 'book'])
+            ->where('book_id', $book_id) // Filter reviews where user_id matches the logged-in user
+            ->get();
 
+
+        return view('reviews.list', ['reviewslist' => $data]);
+    }
     /**
      * Display the specified resource.
      */
