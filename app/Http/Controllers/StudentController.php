@@ -28,6 +28,13 @@ class StudentController extends Controller
     {
         // dd("here");
         // $data = User::where('role', 'student')->get();
+        // $classes = FormClass::where('teacher_id', 62)
+        // ->with('students')
+        // ->get();
+
+        // dd($classes);
+
+
         $data = User::where('role', 'student')->with('class','book')->get();
         $classes = FormClass::all();
         // dd($data);

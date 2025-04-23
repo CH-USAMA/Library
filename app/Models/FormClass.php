@@ -13,6 +13,10 @@ class FormClass extends Model
         return $this->belongsTo(User::class, 'teacher_id', 'id');
     }
 
+    public function students()
+    {
+        return $this->hasMany(User::class, 'assigned_class')->where('role', 'student');
+    }
     // Relationship to the substitute teacher
     public function substituteTeacher()
     {
