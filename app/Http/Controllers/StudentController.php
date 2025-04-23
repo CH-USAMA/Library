@@ -28,9 +28,9 @@ class StudentController extends Controller
     {
         // dd("here");
         // $data = User::where('role', 'student')->get();
-        $data = User::where('role', 'student')->with('class')->get();
+        $data = User::where('role', 'student')->with('class','book')->get();
         $classes = FormClass::all();
-
+        // dd($data);
         // dd($data[0]->class->class_name);
         return view('students.list', ['userslist' => $data, 'classes' => $classes]);
     }

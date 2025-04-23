@@ -239,7 +239,7 @@
                 @endif
 
 
-                
+
                 <div class="col-xl-8">
                     <!--begin::Col-->
                     <figure class="highcharts-figure">
@@ -247,11 +247,11 @@
                     </figure>
 
                 </div>
-                
+
                 <!--end::Row-->
 
                 <!--begin::Col-->
-               
+
                 <div class="col-xl-4">
                     <!--begin::List widget 21-->
                     <div class="card card-flush h-xl-100">
@@ -373,43 +373,43 @@
     @endsection
     @section('footerjs')
     $(document).ready(function () {
-    $.ajax({
-    url: "/chart-data-book",
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-    Highcharts.chart('container', {
-    chart: {
-    type: 'pie'
-    },
-    title: {
-    text: 'Books by Category'
-    },
-    tooltip: {
-    valueSuffix: '%'
-    },
-    plotOptions: {
-    series: {
-    allowPointSelect: true,
-    cursor: 'pointer',
-    dataLabels: {
-    enabled: true
-    }
-    }
-    },
-    series: [
-    {
-    name: 'Books',
-    colorByPoint: true,
-    data: response // Populated dynamically
-    }
-    ]
-    });
-    },
-    error: function (error) {
-    console.error("Error fetching data: ", error);
-    }
-    });
+        $.ajax({
+            url: "/chart-data-book",
+            method: "GET",
+            dataType: "json",
+            success: function (response) {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Books by Genre'
+                    },
+                    tooltip: {
+                        valueSuffix: ' books'
+                    },
+                    plotOptions: {
+                        series: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Books',
+                            colorByPoint: true,
+                            data: response // Populated dynamically
+                        }
+                    ]
+                });
+            },
+            error: function (error) {
+                console.error("Error fetching data: ", error);
+            }
+        });
     });
 
 

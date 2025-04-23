@@ -131,6 +131,8 @@ Route::controller(FormClassController::class)->group(function () {
     Route::get('/createformclass', 'createformclass')->name('formclasscreation');
     Route::post('/storeformclass', 'storeformclass')->name('storeformclass');
     Route::post('/assign-students', 'assignStudents')->name('assignStudents');
+    Route::post('/assign-students-book', 'assignStudentsBook')->name('assignStudentsBook');
+
 
     //Route::post('/storereview','storereview')->name('reviewstore');
     //Route::get('/deletereview/{id}','deletereview')->name('deletereview');

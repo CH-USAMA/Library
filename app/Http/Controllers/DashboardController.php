@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\FormClass;
 use App\Models\User;
 use App\Models\Book;
+use App\Models\Genre;
 use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use App\Models\Question;
@@ -128,16 +129,14 @@ class DashboardController extends Controller
 
     public function getBookCategoryData()
     {
-        $books = Book::select('category', DB::raw('COUNT(*) as total'))
-            ->groupBy('category')
-            ->get();
-
+       
+        $books  = Genre::withCount('book')->get();
         $chartData = [];
 
         foreach ($books as $book) {
             $chartData[] = [
-                'name' => $book->category,
-                'y' => (int) $book->total,
+                'name' => $book->genre_name,
+                'y' =>  $book->book_count,
             ];
         }
 

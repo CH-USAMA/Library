@@ -42,7 +42,10 @@
                 <!--begin:: Export-->
                 <!-- <a href="#" class="btn btn-sm fw-bold btn-info"><i class="fa-duotone fa-download me-1 fs-4"></i>Export</a> -->
                 <button type="button" class="btn btn-sm fw-bold btn-info" id="assignStudentsBtn" disabled>
-                    Assign to Class
+                    Bulk Class Assign
+                </button>
+                <button type="button" class="btn btn-sm fw-bold btn-danger" id="assignStudentsBtnBook" disabled>
+                    Bulk Book Assign
                 </button>
                 <!--end:: Export-->
 
@@ -119,7 +122,7 @@
                                         <div class="text-dark fw-bold">{{$user['date_of_birth']}}</div>
                                     </td>
                                     <td class="align-middle">
-                                        <div class="text-dark fw-bold">{{$user['current_book_name']}}</div>
+                                        <div class="text-dark fw-bold">{{$user->book ? $user->book->title : 'N/A' }}</div>
                                     </td>
 
 
@@ -194,6 +197,30 @@
         </div>
     </div>
 
+
+     <!-- Assign Students Book Modal -->
+     <div class="modal fade" id="assignStudentsModalBook" tabindex="-1" aria-labelledby="assignStudentsModalBookLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignStudentsModalBookLabel">Assign Books to Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="assignStudentsBookForm" action="{{ route('assignStudentsBook') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                       <strong>Click Assign to automatically assign books to selected students</strong>
+                        <input type="hidden" name="student_ids" id="selectedStudentsBook">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Assign</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!--end::Row-->
     @endsection
 
@@ -229,6 +256,23 @@
                 });
                 $('#selectedStudents').val(selectedStudents.join(',')); // Store student IDs in hidden input
                 $('#assignStudentsModal').modal('show'); // Show modal
+            });
+
+
+            // Bulk assign books to students
+            function toggleAssignButton() {
+                let selected = $('input[name="students[]"]:checked').length;
+                $('#assignStudentsBtnBook').prop('disabled', selected === 0);
+            }
+
+            // Open Modal and Pass Selected Students
+            $('#assignStudentsBtnBook').on('click', function() {
+                let selectedStudents = [];
+                $('input[name="students[]"]:checked').each(function() {
+                    selectedStudents.push($(this).val());
+                });
+                $('#selectedStudentsBook').val(selectedStudents.join(',')); // Store student IDs in hidden input
+                $('#assignStudentsModalBook').modal('show'); // Show modal
             });
         });
     </script>

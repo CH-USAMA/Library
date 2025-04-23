@@ -334,6 +334,14 @@
                                             </span>
                                             <span class="menu-title">Classes</span>
                                         </a>
+
+
+                                        <a class="menu-link" href="{{route("teacherclasses")}}">
+                                            <span class="menu-icon">
+                                                <i class="fa-regular fa-circle fs-3"></i>
+                                            </span>
+                                            <span class="menu-title">Teachers Classes</span>
+                                        </a>
                                         @endif
                                         <!--begin:Menu link-->
 
