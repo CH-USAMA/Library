@@ -116,12 +116,16 @@ class BookController extends Controller
      */
     public function updatebook(Request $request)
     {
+
         $request->validate([
             'title' => ['nullable']
         ]);
         $id = $request->id;
         $book = Book::find(id: $id);
         $book->update($request->all());
+        $book->genres()->sync($request->genre);
+        // dd($request->all());
+
         //dd($note);
         //$note->update($request->all());
         //$book->update($request->only('title', 'content'));

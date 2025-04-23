@@ -245,6 +245,7 @@
 
             function toggleAssignButton() {
                 let selected = $('input[name="students[]"]:checked').length;
+                $('#assignStudentsBtnBook').prop('disabled', selected === 0);
                 $('#assignStudentsBtn').prop('disabled', selected === 0);
             }
 
@@ -260,10 +261,10 @@
 
 
             // Bulk assign books to students
-            function toggleAssignButton() {
-                let selected = $('input[name="students[]"]:checked').length;
-                $('#assignStudentsBtnBook').prop('disabled', selected === 0);
-            }
+            // function toggleAssignButton() {
+            //     let selected = $('input[name="students[]"]:checked').length;
+            //     $('#assignStudentsBtnBook').prop('disabled', selected === 0);
+            // }
 
             // Open Modal and Pass Selected Students
             $('#assignStudentsBtnBook').on('click', function() {

@@ -23,9 +23,9 @@
 					</li>
 					<!--end::Item-->
 					<!--begin::Item-->
-                    <li class="breadcrumb-item text-muted">
-					    <a href={{route("books")}} class="text-muted text-hover-primary">Books</a>
-                    </li>
+					<li class="breadcrumb-item text-muted">
+						<a href={{route("books")}} class="text-muted text-hover-primary">Books</a>
+					</li>
 					<!--end::Item-->
 				</ul>
 				<!--end::Breadcrumb-->
@@ -37,140 +37,140 @@
 	</div>
 
 
-	
+
 	<!--begin::Content-->
 	<div id="kt_app_content" class="app-content flex-column-fluid">
 		<!--begin::Content container-->
 		<div id="kt_app_content_container" class="">
 			@if (empty($book))
-				<form action="{{route('bookstore')}}" method="POST" enctype="multipart/form-data">
-			@else
-				<form action="{{route('updatebook')}}" method="POST"enctype="multipart/form-data">
-			@endif
+			<form action="{{route('bookstore')}}" method="POST" enctype="multipart/form-data">
+				@else
+				<form action="{{route('updatebook')}}" method="POST" enctype="multipart/form-data">
+					@endif
 					<div id="kt_app_content" class="app-content flex-column-fluid">
 						@csrf
-										<!--begin::Content container-->
-										<div id="kt_app_content_container" class="">
-											<!--begin::Row-->
-											<div class="row g-5 g-xl-10">
-												<div class="col-xl-12">
-													<div class="card ">
-														<div class="card-header align-items-center px-3 min-h-50px">
-															<h3 class=" mb-0">Create Book</h3>
-														</div>
-														<div class="card-body p-3 pt-0">
-															<div class="row">
-																<!--begin::Col-->
-																<input hidden type="text" name="id" value="{{$book->id ?? ''}}" class="form-control form-control-solid">
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">Publisher</label>
-																	<input type="text" name="publisher" value="{{$book->publisher ?? ''}}" id="inputPublisher" class="form-control form-control-solid @error('publisher') is-invalid @enderror">
-																	@error('publisher')
-																	<span class="invalid-feedback" role="alert">
-																		<strong>{{ $message }}</strong>
-																	</span>
-																@enderror
-																</div>
-																<!--end::Col-->
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">Title</label>
-																	<input type="text" name="title" value="{{$book->title ?? ''}}" id="inputTitle" class="form-control form-control-solid @error('title') is-invalid @enderror">
-																	@error('title')
-																	<span class="invalid-feedback" role="alert">
-																		<strong>{{ $message }}</strong>
-																	</span>
-																@enderror
-																</div>
-																<!--end::Col-->
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">Author</label>
-																	<input type="text" name="author" value="{{$book->author ?? ''}}" id="inputAuthor" class="form-control form-control-solid @error('author') is-invalid @enderror">
-																	@error('author')
-																	<span class="invalid-feedback" role="alert">
-																		<strong>{{ $message }}</strong>
-																	</span>
-																@enderror
-																</div>
-																<!--end::Col-->
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">Genre</label>
-																	<select name="genre[]"class="form-select form-select-solid" data-control="select2" multiple size="4">
-																		<option value="1" disabled >Select Genre</option>
-																		@foreach($genrelist as $genre)
-																		<option value="{{$genre->id}}">{{ $genre->genre_name}}</option>
-																		@endforeach
-																	</select>
-																</div>
-				
-																<!--end::Col-->
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">Category</label>
-																	<input type="text" name="category" value="{{$book->category ?? ''}}" id="inputCategory" class="form-control form-control-solid @error('category') is-invalid @enderror">
-																	@error('category')
-																	<span class="invalid-feedback" role="alert">
-																		<strong>{{ $message }}</strong>
-																	</span>
-																@enderror
-																</div>
-																<!--end::Col-->
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">Description</label>
-																	<input type="text" name="description" value="{{$book->description ?? ''}}" id="inputDescription" class="form-control form-control-solid @error('description') is-invalid @enderror">
-																	@error('description')
-																	<span class="invalid-feedback" role="alert">
-																		<strong>{{ $message }}</strong>
-																	</span>
-																@enderror
-																</div>
-																<!--end::Col-->
+						<!--begin::Content container-->
+						<div id="kt_app_content_container" class="">
+							<!--begin::Row-->
+							<div class="row g-5 g-xl-10">
+								<div class="col-xl-12">
+									<div class="card ">
+										<div class="card-header align-items-center px-3 min-h-50px">
+											<h3 class=" mb-0">Create Book</h3>
+										</div>
+										<div class="card-body p-3 pt-0">
+											<div class="row">
+												<!--begin::Col-->
+												<input hidden type="text" name="id" value="{{$book->id ?? ''}}" class="form-control form-control-solid">
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">Publisher</label>
+													<input type="text" name="publisher" value="{{$book->publisher ?? ''}}" id="inputPublisher" class="form-control form-control-solid @error('publisher') is-invalid @enderror">
+													@error('publisher')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<!--end::Col-->
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">Title</label>
+													<input type="text" name="title" value="{{$book->title ?? ''}}" id="inputTitle" class="form-control form-control-solid @error('title') is-invalid @enderror">
+													@error('title')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<!--end::Col-->
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">Author</label>
+													<input type="text" name="author" value="{{$book->author ?? ''}}" id="inputAuthor" class="form-control form-control-solid @error('author') is-invalid @enderror">
+													@error('author')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<!--end::Col-->
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">Genre</label>
+													<select name="genre[]" class="form-select form-select-solid" data-control="select2" multiple size="4">
+														<option value="1" disabled>Select Genre</option>
+														@foreach($genrelist as $genre)
+														<option value="{{$genre->id}}" @if(isset($book) && $book?->genres?->pluck('id')->contains($genre->id)) selected @endif>{{ $genre->genre_name}}</option>
+														@endforeach
+													</select>
+												</div>
 
-																<!--begin::Col-->
-																<div class="col-md-6 fv-row mb-5">
-																	<label class="form-label">OR Level</label>
-																	<input type="text" name="or_level" value="{{$book->or_level ?? ''}}"  id="inputOrLevel" class="form-control form-control-solid @error('or_level') is-invalid @enderror">
-																	@error('or_level')
-																		<span class="invalid-feedback" role="alert">
-																			<strong>{{ $message }}</strong>
-																		</span>
-																	@enderror
-																</div>
-																<div class="col-md-12 fv-row mb-5">
-																	<label class="form-label">Content</label>
-																	<textarea type="text" rows=6 name="content" value="{{$book->content ?? ''}}"  id="inputContent" class="form-control form-control-solid @error('content') is-invalid @enderror"></textarea>
-																	@error('content')
-																		<span class="invalid-feedback" role="alert">
-																			<strong>{{ $message }}</strong>
-																		</span>
-																	@enderror
-																</div>
-																<div class="col-md-12 fv-row mb-5">
-																	<label class="form-label">Image</label>
-																	<input name="image" type="file" name="image" class="form-control form-control-solid">
-																</div>
-																<!--end::Col-->
-															<div class="mb-0 mt-1">
-																<!--begin::Submit-->
-																<button type="submit" class="btn btn-primary float-end mt-5">Submit</button>
-																<a href="{{route('users')}}" class="btn btn-warning">Cancel</a>
-																<!--end::Submit-->
-															</div>
-														</div>
-													</div>
+												<!--end::Col-->
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">Category</label>
+													<input type="text" name="category" value="{{$book->category ?? ''}}" id="inputCategory" class="form-control form-control-solid @error('category') is-invalid @enderror">
+													@error('category')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<!--end::Col-->
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">Description</label>
+													<input type="text" name="description" value="{{$book->description ?? ''}}" id="inputDescription" class="form-control form-control-solid @error('description') is-invalid @enderror">
+													@error('description')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<!--end::Col-->
+
+												<!--begin::Col-->
+												<div class="col-md-6 fv-row mb-5">
+													<label class="form-label">OR Level</label>
+													<input type="text" name="or_level" value="{{$book->or_level ?? ''}}" id="inputOrLevel" class="form-control form-control-solid @error('or_level') is-invalid @enderror">
+													@error('or_level')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<div class="col-md-12 fv-row mb-5">
+													<label class="form-label">Content</label>
+													<textarea type="text" rows=6 name="content" value="{{$book->content ?? ''}}" id="inputContent" class="form-control form-control-solid @error('content') is-invalid @enderror"></textarea>
+													@error('content')
+													<span class="invalid-feedback" role="alert">
+														<strong>{{ $message }}</strong>
+													</span>
+													@enderror
+												</div>
+												<div class="col-md-12 fv-row mb-5">
+													<label class="form-label">Image</label>
+													<input name="image" type="file" name="image" class="form-control form-control-solid">
+												</div>
+												<!--end::Col-->
+												<div class="mb-0 mt-1">
+													<!--begin::Submit-->
+													<button type="submit" class="btn btn-primary float-end mt-5">Submit</button>
+													<a href="{{route('users')}}" class="btn btn-warning">Cancel</a>
+													<!--end::Submit-->
 												</div>
 											</div>
-											<!--end::Row-->
-				
 										</div>
-										<!--end::Content container-->
 									</div>
-			</div>
-			
+								</div>
+								<!--end::Row-->
+
+							</div>
+							<!--end::Content container-->
+						</div>
+					</div>
+
 		</div>
 		<!--end::Content container-->
 	</div>
