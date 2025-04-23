@@ -92,7 +92,6 @@
                                             </div>
                                         </div>
                                     </td>
-
                                     @if(Auth::user()->role == 'teacher' OR Auth::user()->role =='admin')
                                     <td class="align-middle">
                                         <div class="text-dark fw-bold d-block">{{$assignment->student['name']}}</div>

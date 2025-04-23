@@ -39,6 +39,13 @@ class FormClassController extends Controller
         return view('formclasses.form',['teacherslist'=>$teachers]);
     }
 
+    public function classStudents()
+    {
+        $data = User::where('role', 'student')->with('class','book')->get();
+        $classes = FormClass::all();
+        return view('students.list', ['userslist' => $data, 'classes' => $classes]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

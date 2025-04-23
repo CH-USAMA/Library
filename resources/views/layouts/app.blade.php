@@ -334,6 +334,7 @@
                                             </span>
                                             <span class="menu-title">Classes</span>
                                         </a>
+<<<<<<< HEAD
 
 
                                         <a class="menu-link" href="{{route("teacherclasses")}}">
@@ -342,6 +343,8 @@
                                             </span>
                                             <span class="menu-title">Teachers Classes</span>
                                         </a>
+=======
+>>>>>>> 89b1e67b5763d602f7429a479dccc012fe163384
                                         @endif
                                         <!--begin:Menu link-->
 

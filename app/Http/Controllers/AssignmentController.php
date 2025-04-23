@@ -8,13 +8,27 @@ use App\Models\User;
 
 
 
+
+
 use App\Models\Book;
 use App\Models\Question;
+use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Auth;
 
 class AssignmentController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -34,11 +48,21 @@ class AssignmentController extends Controller
             $data = Assignment::with('student', 'teacher', 'book')->get();
         else
             $data = Assignment::with('student', 'teacher', 'book')->where('student_id', auth()->id())->get();
+        if (Auth::user()->role == 'teacher' or Auth::user()->role == 'admin')
+            $data = Assignment::with('student', 'teacher', 'book')->get();
+        else
+            $data = Assignment::with('student', 'teacher', 'book')->where('student_id', auth()->id())->get();
         //dd($data);
+        return view('assignments.list', ['assignmentslist' => $data]);
         return view('assignments.list', ['assignmentslist' => $data]);
     }
 
     public function studentassignment($id)
+    {
+        $data = Assignment::with('student', 'teacher', 'book')->where('student_id', $id)->get();
+        //dd($data);
+        return view('student_assignment.list', ['assignmentslist' => $data]);
+    }
     {
         $data = Assignment::with('student', 'teacher', 'book')->where('student_id', $id)->get();
         //dd($data);
@@ -56,12 +80,17 @@ class AssignmentController extends Controller
         $questionslist =  Question::all();
 
         return view('assignments.form', ['bookslist' => $books, 'userslist' => $users, 'questionslist' => $questionslist]);
+        $users = User::where('role', 'student')->get();
+        $questionslist =  Question::all();
+
+        return view('assignments.form', ['bookslist' => $books, 'userslist' => $users, 'questionslist' => $questionslist]);
     }
 
     public function selectbook()
     {
         $books = Book::all();
         //return view('students.list',['userslist'=>$data]);
+        return view('assignments.book', ['bookslist' => $books]);
         return view('assignments.book', ['bookslist' => $books]);
     }
 
@@ -70,6 +99,9 @@ class AssignmentController extends Controller
      */
     public function storeassignment(Request $request)
     {
+        // dd($request->all());
+
+        foreach ($request->student_id as $student) {
         // dd($request->all());
 
         foreach ($request->student_id as $student) {
@@ -89,6 +121,7 @@ class AssignmentController extends Controller
                 $AssignmentQuestions->save();
             }
         }
+
 
         return redirect()->route('assignments');
     }
