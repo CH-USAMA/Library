@@ -27,7 +27,7 @@ class FormClassController extends Controller
     public function formclassteacherlist()
     {
         $data = FormClass::with(['teacher', 'substituteteacher'])->get();
-        return view('formclasses.list',['formclasseslist'=>$data]);
+        return view('formclasses.list', ['formclasseslist' => $data]);
     }
 
     /**
@@ -36,12 +36,12 @@ class FormClassController extends Controller
     public function createformclass()
     {
         $teachers = User::where('role', 'teacher')->get();
-        return view('formclasses.form',['teacherslist'=>$teachers]);
+        return view('formclasses.form', ['teacherslist' => $teachers]);
     }
 
     public function classStudents()
     {
-        $data = User::where('role', 'student')->with('class','book')->get();
+        $data = User::where('role', 'student')->with('class', 'book')->get();
         $classes = FormClass::all();
         return view('students.list', ['userslist' => $data, 'classes' => $classes]);
     }
@@ -76,20 +76,20 @@ class FormClassController extends Controller
             'class_id' => 'required|exists:form_classes,id',
             'student_ids' => 'required|string',
         ]);
-        
+
         $studentIds = explode(',', $request->student_ids);
 
         // Ensure we have valid IDs
-            if (!is_array($studentIds) || count($studentIds) === 0) {
-                return back()->withErrors(['student_ids' => 'No students selected.']);
-            }
+        if (!is_array($studentIds) || count($studentIds) === 0) {
+            return back()->withErrors(['student_ids' => 'No students selected.']);
+        }
 
-         // Update class_id for selected students
+        // Update class_id for selected students
         User::whereIn('id', $studentIds)->update(['assigned_class' => $request->class_id]);
 
 
         // dd($request->all());
-    
+
         return back()->with('success', 'Students assigned to class successfully!');
     }
 
@@ -101,43 +101,62 @@ class FormClassController extends Controller
         $request->validate([
             'student_ids' => 'required|string',
         ]);
-        
+
         $studentIds = explode(',', $request->student_ids);
 
         // Ensure we have valid IDs
-            if (!is_array($studentIds) || count($studentIds) === 0) {
-                return back()->withErrors(['student_ids' => 'No students selected.']);
-            }
+        if (!is_array($studentIds) || count($studentIds) === 0) {
+            return back()->withErrors(['student_ids' => 'No students selected.']);
+        }
 
-         // Update book_id for selected students
+        // Update book_id for selected students
 
-         foreach ($studentIds as $id) {
+        foreach ($studentIds as $id) {
             $user = User::find($id);
-            $preferredGenreIds = $user->genre->pluck('id')->toArray();;
-    
+            $preferredGenreIds = $user->genre->pluck('id')->toArray();
+            $studentOrLevel = $user->or_level;
+
+            // 1. Book IDs that match preferred genres AND student OR level
             $matchingBookIds = DB::table('book_genre')
-                ->whereIn('genre_id', $preferredGenreIds)
-                ->pluck('book_id')
-                ->unique() // Remove duplicates
+                ->join('books', 'book_genre.book_id', '=', 'books.id')
+                ->whereIn('book_genre.genre_id', $preferredGenreIds)
+                ->where('books.or_level', $studentOrLevel)
+                ->pluck('book_genre.book_id')
+                ->unique()
                 ->toArray();
+
+            // 2. Get reviewed book IDs by this student
             $reviewedBookIds = Review::where('student_id', $user->id)
                 ->pluck('book_id')
                 ->toArray();
-    
-            $unreviewedBooks = array_diff($matchingBookIds, $reviewedBookIds); // Remove reviewed books
-    
+
+            // 3. Filter out already reviewed books
+            $unreviewedBooks = array_diff($matchingBookIds, $reviewedBookIds);
+
+            // 4. Smart book assignment flow
             if (!empty($unreviewedBooks)) {
-                $assignedBookId = reset($unreviewedBooks); // Get the first book ID
+                // Found unreviewed books with matching genre & or_level
+                $assignedBookId = reset($unreviewedBooks);
             } else {
-                $assignedBookId = Book::whereNotIn('id', $reviewedBookIds)->inRandomOrder()->value('id');
+                // Try: Any unreviewed book with same or_level
+                $assignedBookId = Book::where('or_level', $studentOrLevel)
+                    ->whereNotIn('id', $reviewedBookIds)
+                    ->inRandomOrder()
+                    ->value('id');
+
+                // Final fallback: Any unreviewed book
+                if (!$assignedBookId) {
+                    $assignedBookId = Book::whereNotIn('id', $reviewedBookIds)
+                        ->inRandomOrder()
+                        ->value('id');
+                }
             }
-           
+
             $user->update(['book_id' => $assignedBookId, 'current_book_name' => Book::find($assignedBookId)->title]);
-    
-         }
-        
-       
-    
+        }
+
+
+
         return back()->with('success', 'Books assigned to Stufdents successfully!');
     }
 
