@@ -36,6 +36,8 @@ class AssignmentQuestionsController extends Controller
     public function updateanswerquestions(Request $request)
     {
         $questions = $request->input('questions'); // Retrieve all questions
+        $book_id = $request->input('book_id'); // Retrieve all questions
+
         //dd($questions);
 
         foreach ($questions as $question) {
@@ -58,6 +60,8 @@ class AssignmentQuestionsController extends Controller
         }
         if ($assignmentId) {
             $assignment = Assignment::find($assignmentId);
+            $assignment->book_id = $book_id;
+
     
             if ($assignment) {
                 if ($assignment->status == 'Not Completed') {
@@ -68,7 +72,10 @@ class AssignmentQuestionsController extends Controller
                 // If feedback is provided and status is Pending Feedback, mark as Completed
                 if ($assignment->status == 'Pending Feedback' && $request->filled('feedback')) {
                     $assignment->feedback = $request->feedback;
+
                     $assignment->status = 'Completed';
+
+
                 }
     
                 $assignment->save();
