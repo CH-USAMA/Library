@@ -196,45 +196,45 @@ class StudentController extends Controller
 
     public function assign($id)
     {
-        $user = User::find($id);
-        $preferredGenreIds = $user->genre->pluck('id')->toArray();
-        $studentOrLevel = $user->or_level;
+        // $user = User::find($id);
+        // $preferredGenreIds = $user->genre->pluck('id')->toArray();
+        // $studentOrLevel = $user->or_level;
 
-        // 1. Book IDs that match preferred genres AND student OR level
-        $matchingBookIds = DB::table('book_genre')
-            ->join('books', 'book_genre.book_id', '=', 'books.id')
-            ->whereIn('book_genre.genre_id', $preferredGenreIds)
-            ->where('books.or_level', $studentOrLevel)
-            ->pluck('book_genre.book_id')
-            ->unique()
-            ->toArray();
+        // // 1. Book IDs that match preferred genres AND student OR level
+        // $matchingBookIds = DB::table('book_genre')
+        //     ->join('books', 'book_genre.book_id', '=', 'books.id')
+        //     ->whereIn('book_genre.genre_id', $preferredGenreIds)
+        //     ->where('books.or_level', $studentOrLevel)
+        //     ->pluck('book_genre.book_id')
+        //     ->unique()
+        //     ->toArray();
 
-        // 2. Get reviewed book IDs by this student
-        $reviewedBookIds = Review::where('student_id', $user->id)
-            ->pluck('book_id')
-            ->toArray();
+        // // 2. Get reviewed book IDs by this student
+        // $reviewedBookIds = Review::where('student_id', $user->id)
+        //     ->pluck('book_id')
+        //     ->toArray();
 
-        // 3. Filter out already reviewed books
-        $unreviewedBooks = array_diff($matchingBookIds, $reviewedBookIds);
+        // // 3. Filter out already reviewed books
+        // $unreviewedBooks = array_diff($matchingBookIds, $reviewedBookIds);
 
-        // 4. Smart book assignment flow
-        if (!empty($unreviewedBooks)) {
-            // Found unreviewed books with matching genre & or_level
-            $assignedBookId = reset($unreviewedBooks);
-        } else {
-            // Try: Any unreviewed book with same or_level
-            $assignedBookId = Book::where('or_level', $studentOrLevel)
-                ->whereNotIn('id', $reviewedBookIds)
-                ->inRandomOrder()
-                ->value('id');
+        // // 4. Smart book assignment flow
+        // if (!empty($unreviewedBooks)) {
+        //     // Found unreviewed books with matching genre & or_level
+        //     $assignedBookId = reset($unreviewedBooks);
+        // } else {
+        //     // Try: Any unreviewed book with same or_level
+        //     $assignedBookId = Book::where('or_level', $studentOrLevel)
+        //         ->whereNotIn('id', $reviewedBookIds)
+        //         ->inRandomOrder()
+        //         ->value('id');
 
-            // Final fallback: Any unreviewed book
-            if (!$assignedBookId) {
-                $assignedBookId = Book::whereNotIn('id', $reviewedBookIds)
-                    ->inRandomOrder()
-                    ->value('id');
-            }
-        }
+        //     // Final fallback: Any unreviewed book
+        //     if (!$assignedBookId) {
+        //         $assignedBookId = Book::whereNotIn('id', $reviewedBookIds)
+        //             ->inRandomOrder()
+        //             ->value('id');
+        //     }
+        // }
 
         // $user = User::find($id);
         // $preferredGenreIds = $user->genre->pluck('id')->toArray();;
@@ -257,46 +257,63 @@ class StudentController extends Controller
         // }
         //dd($assignedBookId);
         //dd($user->book_id);
-        $user->update(['book_id' => $assignedBookId, 'current_book_name' => Book::find($assignedBookId)->title]);
+        $user = User::find($id);
+        $preferredGenreIds = $user->genre->pluck('id')->toArray();
+        $studentOrLevel = $user->or_level;
+
+        $reviewedBookIds = Review::where('student_id', $user->id)
+            ->pluck('book_id')
+            ->toArray();
+
+        $assignedBookId = null;
+
+        // Step 1: Preferred genres + OR level
+        $assignedBookId = DB::table('book_genre')
+            ->join('books', 'book_genre.book_id', '=', 'books.id')
+            ->whereIn('book_genre.genre_id', $preferredGenreIds)
+            ->where('books.or_level', $studentOrLevel)
+            ->whereNotIn('books.id', $reviewedBookIds)
+            ->inRandomOrder()
+            ->value('book_genre.book_id');
+        dd($assignedBookId,$studentOrLevel,$preferredGenreIds,$reviewedBookIds);
+        // Step 2: Preferred genres + OR level +1
+        if (!$assignedBookId) {
+            $assignedBookId = DB::table('book_genre')
+                ->join('books', 'book_genre.book_id', '=', 'books.id')
+                ->whereIn('book_genre.genre_id', $preferredGenreIds)
+                ->where('books.or_level', $studentOrLevel + 1)
+                ->whereNotIn('books.id', $reviewedBookIds)
+                ->inRandomOrder()
+                ->value('book_genre.book_id');
+        }
+
+        // Step 3: Any book + OR level
+        if (!$assignedBookId) {
+            $assignedBookId = Book::where('or_level', $studentOrLevel)
+                ->whereNotIn('id', $reviewedBookIds)
+                ->inRandomOrder()
+                ->value('id');
+        }
+
+        // Step 4: Any book + OR level +1
+        if (!$assignedBookId) {
+            $assignedBookId = Book::where('or_level', $studentOrLevel + 1)
+                ->whereNotIn('id', $reviewedBookIds)
+                ->inRandomOrder()
+                ->value('id');
+        }
+
+        // Step 5: Still nothing
+        if (!$assignedBookId) {
+            $assignedBookId = null; // or return 'N/A';
+            $book_name = 'N/A';
+        }else{
+            $book_name = Book::find($assignedBookId)->title;
+        }
+
+        $user->update(['book_id' => $assignedBookId, 'current_book_name' => $book_name]);
 
         return redirect()->back();
-        dd($user, $assignedBookId, Book::find($assignedBookId)->title);
-
-        //dd($user->genre->pluck('genre_name'));
-        // dd($usergenre); // 4 and 6
-        // $book = Book::withCount('genre',function ($query) use ($usergenre){
-        //     $query->whereIn('genre_id',$usergenre);
-        // }) -> orderBy('genre_count', 'desc')->first();
-        // dd($user->id);
-
-        // Get books from that genre, excluding those the user has reviewed
-        $book = Book::whereIn('category', $usergenre)
-            ->whereNotIn('id', function ($query) use ($user) {
-                $query->select('book_id')
-                    ->from('reviews')
-                    ->where('student_id', $user->id);
-            })
-            ->inRandomOrder()
-            ->first();
-
-        dd($book);
-
-
-
-        $book = Book::withCount(['genre' => function ($query) use ($usergenre) {
-            $query->whereIn('genre_id', $usergenre);
-        }])->having('genre_count', '>', 0)->orderBy('genre_count', 'desc')->first();
-        //dd($book);
-        if (empty($book)) {
-            $user->current_book_name = "no book found";
-            $user->save();
-            return redirect()->back();
-        } else {
-            $user->book_id = $book->id;
-            $user->current_book_name = $book->title;
-            $user->save();
-            return redirect()->back();
-        }
     }
 
 
