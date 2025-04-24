@@ -35,7 +35,7 @@ class AssignmentController extends Controller
     {
         if (Auth::user()->role == 'admin')
             $data = Assignment::with('student', 'teacher', 'book')->get();
-        elseif(Auth::user()->role == 'student')
+        elseif(Auth::user()->role == 'teacher')
              $data = Assignment::with('student', 'teacher', 'book')->where('teacher_id', auth()->id())->get();
         else
             $data = Assignment::with('student', 'teacher', 'book')->where('student_id', auth()->id())->get();
