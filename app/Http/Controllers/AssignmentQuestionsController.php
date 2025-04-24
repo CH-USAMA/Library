@@ -28,8 +28,8 @@ class AssignmentQuestionsController extends Controller
 
     public function viewassignmentquestions($id)
     {
-        $assignmentquestions = AssignmentQuestions::where('assignment_id', $id)->with('question')->with('assignment')->get();
-        //dd($assignmentquestions);
+        $assignmentquestions = AssignmentQuestions::where('assignment_id', $id)->with('question')->with('assignment')->with('assignment.student')->get();
+        // dd($assignmentquestions);
         return view('assignmentquestions.form', ['assignmentquestionslist' => $assignmentquestions]);
     }
 
